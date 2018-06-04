@@ -1,0 +1,51 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: stock api
+  description: a simple stock api
+
+schemes:
+  - http
+host: localhost
+basePath: /v1
+
+
+paths:
+  /stocks:
+    get:
+      description: returns a list of stocks
+      responses:
+        200:
+          description: Successfully returned a list of artists
+          schema:
+            type: array
+            items:
+              properties:
+                stockID:
+                  type: string
+                stockName:
+                  type: string
+  /stocks/{stockID}:
+    get:
+      summary: get a stock
+      parameters:
+      - name: stockID
+        in: path
+        required: true
+        description: The stock's ID
+        type: string
+        
+      responses:
+        200:
+          description: Stock's info
+          schema:
+            properties:
+              prize:
+                type: integer
+        404:
+          description: The stock does not exists in DB!
+
+
+    
+
+            
