@@ -15,6 +15,7 @@ class CreateStockTables extends Migration
     {
         Schema::create('Stocks', function (Blueprint $table) {
             $table->string('stock_id');
+            $table->string('stockName');
             $table->float("prize",6,2);
             $table->float("highestPrize",6,2);
             $table->float("lowestPrize",6,2);
