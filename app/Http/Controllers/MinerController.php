@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Stock;
+use App\model\Stock;
 
 class MinerController extends Controller{
     var $endPoint;
@@ -32,7 +32,7 @@ class MinerController extends Controller{
             #get json data
             $res = $this->driver->request('GET',$this->formatRequest($stock));
             $resJson=json_decode($res->getBody());
-            #store to database
+            #store to database maybe use StockEloquent class!
             $info = ($resJson->msgArray)[0];
             $s = new Stock();
             $s->stock_id = $info->c;
@@ -41,6 +41,7 @@ class MinerController extends Controller{
             $s->lowestPrize = $info->l;
             $s->volume = $info->tv;
             $s->accVolume = $info->v;
+            $s->stockName = $info->nf;
             $s->save();
         }
     }
