@@ -24,12 +24,13 @@ class StockEloquent implements StockInterface{
 
     function addStock($stockID){
         $checkStock = StockCandidate::where('stock_id','=',$stockID)->first();
-        if ($checkStock==null){
+        if ($checkStock===null){
             $stocks = new StockCandidate();
             $stocks->stock_id = $stockID;
             $stocks->save();    
+            Log::info($stockID);
+
         }
-        
     }
 
     function getLatestStockInfo($stockID){
