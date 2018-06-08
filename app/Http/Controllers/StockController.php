@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+
 use App\lib\stock\StockInterface as StockObj;
 class StockController extends Controller
 {
@@ -11,6 +14,7 @@ class StockController extends Controller
     public function __construct(StockObj $sObj){
 
         $this->stockObj = $sObj;
+        Log::info("I am Stock Controller");
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +24,7 @@ class StockController extends Controller
     public function index()
     {
         $stocks = $this->stockObj->getStockList();
-        return json_encode($stocks,JSON_UNESCAPED_UNICODE);
+        return json_encode($stocks);
     }
 
     /**
@@ -41,8 +45,9 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        return "ok";
+        $this->stockObj->addStock($request->input("stockID"));
+        return response(json_encode(["addStatus"=>true]),201);
+    
     }
 
     /**
@@ -53,7 +58,7 @@ class StockController extends Controller
      */
     public function show($id)
     {
-        //
+      return json_encode($this->stockObj->getLatestStockInfo($id),JSON_UNESCAPED_UNICODE);
     }
 
     /**
