@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-       $schedule->call("App\Http\Controllers\MinerController@mine")->everyMinute();
+       $schedule->call("App\lib\stock\StockEloquent@update")->everyMinute();
 
     }
 
