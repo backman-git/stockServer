@@ -24,5 +24,7 @@ class StockServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind("App\lib\stock\StockInterface","App\lib\stock\StockEloquent");
+        $this->app->bind("App\lib\stock\MinerInterface","App\lib\stock\TwseMiner");
+
     }
 }
