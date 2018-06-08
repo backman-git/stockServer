@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\Log;
 class StockEloquent implements StockInterface{
 
     protected $miner;
-    protected $latestDataAry;
 
     function __construct(Miner $miner){
         $this->miner= $miner;
-        $this->latestDataAry =array();
-        $stockCandidates = stockCandidate::all();
     }
 
     function getStockList(){
@@ -34,20 +31,23 @@ class StockEloquent implements StockInterface{
     }
 
     function getLatestStockInfo($stockID){
-        return $this->latestDataAry[$stockID];
+       return StockHistory::select("stock_id","stockName","prize","highestPrize","lowestPrize","volume","accVolume")->where("stock_id",'=',$stockID)->orderBy('created_at',"dsec")->first();
     }
 
     function update(){
         //store data into stockHistory
-        $historyData=$this->miner->mine(array_map( function($x){return $x['stock_id']; }  , json_decode(stockCandidate::all(),true)));
-        foreach($historyData as $e){
-            $stockHistory = new StockHistory();
-            $this->latestDataAry[$e->stock_id] = $e;
-            foreach($e as $key => $value){
-                $stockHistory->$key =$e->$key;
+        for($idx=0;$idx<12;$idx+=1){
+            $historyData=$this->miner->mine(array_map( function($x){return $x['stock_id']; }  , json_decode(stockCandidate::all(),true)));
+            foreach($historyData as $e){
+                $stockHistory = new StockHistory();
+                $this->latestDataAry[$e->stock_id] = $e;
+                foreach($e as $key => $value){
+                    $stockHistory->$key =$e->$key;
+                }
+                $stockHistory->save();
+            
             }
-            $stockHistory->save();
-
+            sleep(5);
         }
 
       
